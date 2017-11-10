@@ -1,0 +1,470 @@
+SQL> SELECT A
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE (AR LIKE 'A%');
+
+A                                                                               
+--------------------------------------------------                              
+ALGEBRA                                                                         
+ANALISIS COMPLEJO                                                               
+ASTRONOMIA                                                                      
+
+SQL> SELECT A
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE (AR LIKE '%A');
+
+A                                                                               
+--------------------------------------------------                              
+ALGEBRA                                                                         
+ASTRONOMIA                                                                      
+ENSENANZA DE LA MATEMATICA                                                      
+OPTIMIZACION                                                                    
+CALCULO                                                                         
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  WHERE (A LIKE '%DATOS%');
+
+A                                                                               
+--------------------------------------------------                              
+BASES DE DATOS                                                                  
+ALMACENES DE DATOS                                                              
+MINERIA DE DATOS                                                                
+
+SQL> SELECT DNI
+  2  FROM PROFESOR
+  3  WHERE P LIKE '__R%';
+
+       DNI                                                                      
+----------                                                                      
+      2222                                                                      
+      4444                                                                      
+      6666                                                                      
+      7777                                                                      
+
+SQL> SELECT DISTINCT DNI
+  2  FROM PROFESOR
+  3  WHERE REGEXP_LIKE(P, '^[A-Z]{1-5}$');
+
+no rows selected
+
+SQL> SELECT DISTINCT DNI
+  2  FROM PROFESOR
+  3  WHERE REGEXP_LIKE(P,'^/w{,5}$');
+
+no rows selected
+
+SQL> SELECT DISTINCT DNI
+  2  FROM PROFESOR
+  3  WHERE REGEXP_LIKE(P,'\b[A-Z]{1-5}\b');
+
+no rows selected
+
+SQL> SELECT DISTINCT DNI
+  2  FROM PROFESOR
+  3  WHERE LENGTH(P) <= 5
+  4  ;
+
+       DNI                                                                      
+----------                                                                      
+      1111                                                                      
+      3333                                                                      
+      4444                                                                      
+      5555                                                                      
+      7777                                                                      
+      1010                                                                      
+
+6 rows selected.
+
+SQL> SELECT DISTINCT DNI
+  2  FROM PROFESOR
+  3  WHERE LENGTH(P) >= 5;
+
+       DNI                                                                      
+----------                                                                      
+      2222                                                                      
+      3333                                                                      
+      4444                                                                      
+      6666                                                                      
+      7777                                                                      
+      8888                                                                      
+      9999                                                                      
+      1010                                                                      
+      2020                                                                      
+      3030                                                                      
+
+10 rows selected.
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE (FI<= SYSDATE AND FF IS NULL)
+  4  OR (SYSDATE BETWEEN FI AND FF);
+
+P                                                                               
+------------------------------------------------------------                    
+MARIO                                                                           
+JUAN                                                                            
+PEDRO                                                                           
+FRANCISCO                                                                       
+SOLEDAD                                                                         
+DAVID                                                                           
+CARLOS                                                                          
+IVAN                                                                            
+MARIA                                                                           
+JOSE MANUEL                                                                     
+ANGELA                                                                          
+
+11 rows selected.
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN DOCENTE
+  3  WHERE CAS = '8';
+FROM PROFESOR NATURAL JOIN PLAN DOCENTE
+                           *
+ERROR at line 2:
+ORA-00942: table or view does not exist 
+
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE CAS = '8';
+
+P                                                                               
+------------------------------------------------------------                    
+JUAN                                                                            
+JOSE MANUEL                                                                     
+
+SQL> SELECT *
+  2  FROM PLAN_DOCENTE
+  3  ORDER BY FF ASC
+  4  ;
+
+       DNI        CAS        CTA        CPA        CLA FI        FF             
+---------- ---------- ---------- ---------- ---------- --------- ---------      
+      2222          3        1.5          0        1.5 01-SEP-06 31-AUG-07      
+      1010          2        1.5        1.5          3 01-SEP-05 31-AUG-08      
+      1010          9          3          0          3 01-SEP-08 31-AUG-09      
+      1111          8          3        1.5        1.5 01-SEP-07 31-AUG-09      
+      4444          4        1.5          0        1.5 01-SEP-08 31-AUG-10      
+      6666         10          3        1.5        1.5 01-SEP-08 31-AUG-11      
+      1010          9        1.5          0        1.5 01-SEP-09                
+      9999          7          3          3          0 01-SEP-10                
+      5555          6          3          3          0 31-MAR-10                
+      8888         11          6          0          0 01-SEP-09                
+      2020          3        1.5          0        1.5 01-SEP-08                
+
+       DNI        CAS        CTA        CPA        CLA FI        FF             
+---------- ---------- ---------- ---------- ---------- --------- ---------      
+      7777         12        4.5          3          0 01-SEP-10                
+      3333          9        1.5          0        1.5 01-SEP-09                
+      2222          4        1.5          0        1.5 01-SEP-09                
+      3030          8          0        1.5        1.5 01-SEP-09                
+      1111          8          3          0          0 01-SEP-09                
+      4444          5          3          0          0 01-SEP-10                
+      4444          1          3        1.5        1.5 01-SEP-11                
+      3333          2        1.5        1.5          3 01-SEP-08                
+
+19 rows selected.
+
+SQL> SELECT *
+  2  FROM PLAN_DOCENTE
+  3  ORDER BY FF DESC;
+
+       DNI        CAS        CTA        CPA        CLA FI        FF             
+---------- ---------- ---------- ---------- ---------- --------- ---------      
+      4444          1          3        1.5        1.5 01-SEP-11                
+      3333          2        1.5        1.5          3 01-SEP-08                
+      7777         12        4.5          3          0 01-SEP-10                
+      2020          3        1.5          0        1.5 01-SEP-08                
+      8888         11          6          0          0 01-SEP-09                
+      5555          6          3          3          0 31-MAR-10                
+      9999          7          3          3          0 01-SEP-10                
+      4444          5          3          0          0 01-SEP-10                
+      1111          8          3          0          0 01-SEP-09                
+      3030          8          0        1.5        1.5 01-SEP-09                
+      2222          4        1.5          0        1.5 01-SEP-09                
+
+       DNI        CAS        CTA        CPA        CLA FI        FF             
+---------- ---------- ---------- ---------- ---------- --------- ---------      
+      3333          9        1.5          0        1.5 01-SEP-09                
+      1010          9        1.5          0        1.5 01-SEP-09                
+      6666         10          3        1.5        1.5 01-SEP-08 31-AUG-11      
+      4444          4        1.5          0        1.5 01-SEP-08 31-AUG-10      
+      1010          9          3          0          3 01-SEP-08 31-AUG-09      
+      1111          8          3        1.5        1.5 01-SEP-07 31-AUG-09      
+      1010          2        1.5        1.5          3 01-SEP-05 31-AUG-08      
+      2222          3        1.5          0        1.5 01-SEP-06 31-AUG-07      
+
+19 rows selected.
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE (T='GII' AND CAS IN (
+  4  SELECT CAS
+  5  FROM ASIGNATURA
+  6  WHERE A='OPTIMIZACION'))
+  7  ORDER BY P ASC;
+WHERE (T='GII' AND CAS IN (
+       *
+ERROR at line 3:
+ORA-00904: "T": invalid identifier 
+
+
+SQL> SELECT *
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  ;
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT          CAS        CTA        CPA        CLA FI        FF       
+---------- ----- ---------- ---------- ---------- ---------- --------- ---------
+      1010 DAVID                                                                
+         4 TU             9        1.5          0        1.5 01-SEP-09          
+                                                                                
+      1010 DAVID                                                                
+         4 TU             2        1.5        1.5          3 01-SEP-05 31-AUG-08
+                                                                                
+      1010 DAVID                                                                
+         4 TU             9          3          0          3 01-SEP-08 31-AUG-09
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT          CAS        CTA        CPA        CLA FI        FF       
+---------- ----- ---------- ---------- ---------- ---------- --------- ---------
+      1111 JUAN                                                                 
+         6 CU             8          3        1.5        1.5 01-SEP-07 31-AUG-09
+                                                                                
+      1111 JUAN                                                                 
+         6 CU             8          3          0          0 01-SEP-09          
+                                                                                
+      2020 SOLEDAD                                                              
+         7 CU             3        1.5          0        1.5 01-SEP-08          
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT          CAS        CTA        CPA        CLA FI        FF       
+---------- ----- ---------- ---------- ---------- ---------- --------- ---------
+      2222 CARLOS                                                               
+         7 TU             4        1.5          0        1.5 01-SEP-09          
+                                                                                
+      2222 CARLOS                                                               
+         7 TU             3        1.5          0        1.5 01-SEP-06 31-AUG-07
+                                                                                
+      3030 JOSE MANUEL                                                          
+         6 TEU            8          0        1.5        1.5 01-SEP-09          
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT          CAS        CTA        CPA        CLA FI        FF       
+---------- ----- ---------- ---------- ---------- ---------- --------- ---------
+      3333 PEDRO                                                                
+         4 TEU            2        1.5        1.5          3 01-SEP-08          
+                                                                                
+      3333 PEDRO                                                                
+         4 TEU            9        1.5          0        1.5 01-SEP-09          
+                                                                                
+      4444 MARIA                                                                
+         7 TU             5          3          0          0 01-SEP-10          
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT          CAS        CTA        CPA        CLA FI        FF       
+---------- ----- ---------- ---------- ---------- ---------- --------- ---------
+      4444 MARIA                                                                
+         7 TU             1          3        1.5        1.5 01-SEP-11          
+                                                                                
+      4444 MARIA                                                                
+         7 TU             4        1.5          0        1.5 01-SEP-08 31-AUG-10
+                                                                                
+      5555 IVAN                                                                 
+         1 CEU            6          3          3          0 31-MAR-10          
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT          CAS        CTA        CPA        CLA FI        FF       
+---------- ----- ---------- ---------- ---------- ---------- --------- ---------
+      6666 CARMEN                                                               
+         3 CD            10          3        1.5        1.5 01-SEP-08 31-AUG-11
+                                                                                
+      7777 MARIO                                                                
+         2 TU            12        4.5          3          0 01-SEP-10          
+                                                                                
+      8888 FRANCISCO                                                            
+         5 TU            11          6          0          0 01-SEP-09          
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT          CAS        CTA        CPA        CLA FI        FF       
+---------- ----- ---------- ---------- ---------- ---------- --------- ---------
+      9999 ANGELA                                                               
+         8 TEU            7          3          3          0 01-SEP-10          
+                                                                                
+
+19 rows selected.
+
+SQL> SELECT DISTINC P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE CAS IN(
+  4  SELECT CAS
+  5  FROM ASIGNATURA WHERE A='OPTIMIZACION'));
+FROM ASIGNATURA WHERE A='OPTIMIZACION'))
+                                       *
+ERROR at line 5:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT DISTINC P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE CAS IN(
+  4  SELECT CAS
+  5  FROM ASIGNATURA WHERE A='OPTIMIZACION');
+SELECT DISTINC P
+       *
+ERROR at line 1:
+ORA-00904: "DISTINC": invalid identifier 
+
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE CAS IN(
+  4  SELECT CAS
+  5  FROM ASIGNATURA WHERE A='OPTIMIZACION');
+
+P                                                                               
+------------------------------------------------------------                    
+JUAN                                                                            
+JOSE MANUEL                                                                     
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE CAS IN(
+  4  SELECT CAS
+  5  FROM ASIGNATURA WHERE A='OPTIMIZACION');
+
+P                                                                               
+------------------------------------------------------------                    
+JUAN                                                                            
+JOSE MANUEL                                                                     
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE CAS IN(
+  4  SELECT CAS
+  5  FROM ASIGNATURA WHERE A='OPTIMIZACION')
+  6  AND T='GII')
+  7  ORDER BY P ASC;
+AND T='GII')
+           *
+ERROR at line 6:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE CAS IN(
+  4  SELECT CAS
+  5  FROM ASIGNATURA WHERE A='OPTIMIZACION'
+  6  AND T='GII')
+  7  ORDER BY P ASC;
+
+P                                                                               
+------------------------------------------------------------                    
+JOSE MANUEL                                                                     
+JUAN                                                                            
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE CAR IN
+  4  (SELECT CAR
+  5  FROM AREA
+  6  WHERE CD IN
+  7  (SELECT D
+  8  FROM DEPARTAMENTO
+  9  WHERE D='MATEMATICA FUNDAMENTAL'));
+(SELECT D
+        *
+ERROR at line 7:
+ORA-01722: invalid number 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE CAR IN
+  4  (SELECT CAR
+  5  FROM AREA
+  6  WHERE CD IN
+  7  (SELECT CD
+  8  FROM DEPARTAMENTO
+  9  WHERE D='MATEMATICA FUNDAMENTAL'))
+ 10  ORDER BY P DESC;
+
+P                                                                               
+------------------------------------------------------------                    
+IVAN                                                                            
+
+SQL> SELECT DISTINCT A
+  2  FROM ASIGNATURA NATURAL JOIN PLAN_DOCENTE
+  3  WHERE DNI='1010';
+
+A                                                                               
+--------------------------------------------------                              
+GESTION DE RIESGOS                                                              
+INTELIGENCIA ARTIFICIAL                                                         
+
+SQL> SELECT DISTINCT A
+  2  FROM ASIGNATURA NATURAL JOIN PLAN_DOCENTE
+  3  WHERE DNI IN (
+  4  SELECT DNI
+  5  FROM PROFESOR
+  6  WHERE P='DAVID');
+
+A                                                                               
+--------------------------------------------------                              
+GESTION DE RIESGOS                                                              
+INTELIGENCIA ARTIFICIAL                                                         
+
+SQL> SELECT AR
+  2  FROM AREA NATURAL JOIN DEPARTAMENTO
+  3  WHERE D='ESTADISTICA, INVESTIGACION OPERATIVA Y COMPUTACION';
+
+no rows selected
+
+SQL> SELECT *
+  2  FROM DEPARTAMENTO;
+
+        CD D                                                                    
+---------- ------------------------------------------------------------         
+         1 ANALISIS MATEMATICO                                                  
+         2 ASTROFISICA                                                          
+         3 ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                   
+         4 MATEMATICA FUNDAMENTAL                                               
+
+SQL> SELECT AR
+  2  FROM AREA NATURAL JOIN DEPARTAMENTO
+  3  WHERE D='ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION';
+
+AR                                                                              
+------------------------------------------------------------                    
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+ESTADISTICA E INVESTIGACION OPERATIVA                                           
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+
+SQL> SELECT DISTINCT A
+  2  FROM ASIGNATURA NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR(SYSDATE>=FI AND FF IS NULL))
+  5  AND DNI IN(SELECT DNI
+  6  FROM PROFESOR
+  7  WHERE CAT='CU');
+
+A                                                                               
+--------------------------------------------------                              
+OPTIMIZACION                                                                    
+ALMACENES DE DATOS                                                              
+
+SQL> SPOOL OFF
