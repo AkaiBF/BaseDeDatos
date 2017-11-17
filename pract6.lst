@@ -1,0 +1,348 @@
+SQL> SELECT SYSDATE
+  2  FROM DUAL;
+
+SYSDATE                                                                         
+---------                                                                       
+17-NOV-17                                                                       
+
+SQL> SELECT SYSTIMESTAMP
+  2  FROM DUAL;
+
+SYSTIMESTAMP                                                                    
+---------------------------------------------------------------------------     
+17-NOV-17 04.04.00.992462 PM +00:00                                             
+
+SQL> SELECT TO_CHAR(SYSDATE, 'DAY, DD MON YYYY')
+  2  FROM DUAL;
+
+TO_CHAR(SYSDATE,'DAY,DDMONYYYY')                                                
+----------------------------------------------------------                      
+FRIDAY   , 17 NOV 2017                                                          
+
+SQL> SELECT TO_CHAR (SYSDATE, 'HH24:MI:22')
+  2  ;
+
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT TO_CHAR (SYSDATE, 'HH24:MI:SS')
+  2  FROM DUAL;
+
+TO_CHAR(                                                                        
+--------                                                                        
+16:09:10                                                                        
+
+SQL> DESCRIBE PLAN_DOCENTE;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ DNI                                       NOT NULL NUMBER(8)
+ CAS                                       NOT NULL NUMBER(3)
+ CTA                                                NUMBER(3,1)
+ CPA                                                NUMBER(3,1)
+ CLA                                                NUMBER(3,1)
+ FI                                        NOT NULL DATE
+ FF                                                 DATE
+
+SQL> SELECT TO_CHAR((SYSDATE - FI), 'DD')
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='8888'
+  4  AND CAS='11';
+SELECT TO_CHAR((SYSDATE - FI), 'DD')
+                               *
+ERROR at line 1:
+ORA-01481: invalid number format model 
+
+
+SQL> SELECT (SYSDATE - FI)
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='8888'
+  4  AND CAS='11';
+
+(SYSDATE-FI)                                                                    
+------------                                                                    
+  2999.67543                                                                    
+
+SQL> SELECT *
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='8888'
+  4  AND CAS='11';
+
+       DNI        CAS        CTA        CPA        CLA FI        FF             
+---------- ---------- ---------- ---------- ---------- --------- ---------      
+      8888         11          6          0          0 01-SEP-09                
+
+SQL> SELECT (SYSDATE - FI)
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='8888'
+  4  AND FF IS NULL
+  5  AND CAS='11';
+
+(SYSDATE-FI)                                                                    
+------------                                                                    
+  2999.67694                                                                    
+
+SQL> SELECT ROUND (SYSDATE - FI)
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='8888'
+  4  AND FF IS NULL
+  5  AND CAS='11';
+
+ROUND(SYSDATE-FI)                                                               
+-----------------                                                               
+             3000                                                               
+
+SQL> SELECT ROUND (SYSDATE - FI)
+  2  FROM PLAN_DOCENTE;
+
+ROUND(SYSDATE-FI)                                                               
+-----------------                                                               
+             4461                                                               
+             3365                                                               
+             3000                                                               
+             3731                                                               
+             3000                                                               
+             3365                                                               
+             4096                                                               
+             3000                                                               
+             3000                                                               
+             3365                                                               
+             3000                                                               
+
+ROUND(SYSDATE-FI)                                                               
+-----------------                                                               
+             2270                                                               
+             3365                                                               
+             2635                                                               
+             2789                                                               
+             3365                                                               
+             2635                                                               
+             3000                                                               
+             2635                                                               
+
+19 rows selected.
+
+SQL> SELECT ROUND ((SYSDATE - FI), 1)
+  2  FROM PLAN_DOCENTE;
+
+ROUND((SYSDATE-FI),1)                                                           
+---------------------                                                           
+               4460.7                                                           
+               3364.7                                                           
+               2999.7                                                           
+               3730.7                                                           
+               2999.7                                                           
+               3364.7                                                           
+               4095.7                                                           
+               2999.7                                                           
+               2999.7                                                           
+               3364.7                                                           
+               2999.7                                                           
+
+ROUND((SYSDATE-FI),1)                                                           
+---------------------                                                           
+               2269.7                                                           
+               3364.7                                                           
+               2634.7                                                           
+               2788.7                                                           
+               3364.7                                                           
+               2634.7                                                           
+               2999.7                                                           
+               2634.7                                                           
+
+19 rows selected.
+
+SQL> SELECT ROUND ((SYSDATE - FI), -1)
+  2  FROM PLAN_DOCENTE;
+
+ROUND((SYSDATE-FI),-1)                                                          
+----------------------                                                          
+                  4460                                                          
+                  3360                                                          
+                  3000                                                          
+                  3730                                                          
+                  3000                                                          
+                  3360                                                          
+                  4100                                                          
+                  3000                                                          
+                  3000                                                          
+                  3360                                                          
+                  3000                                                          
+
+ROUND((SYSDATE-FI),-1)                                                          
+----------------------                                                          
+                  2270                                                          
+                  3360                                                          
+                  2630                                                          
+                  2790                                                          
+                  3360                                                          
+                  2630                                                          
+                  3000                                                          
+                  2630                                                          
+
+19 rows selected.
+
+SQL> SELECT TRUNC (SYSDATE - FI)
+  2  FROM PLAN_DOCENTE;
+
+TRUNC(SYSDATE-FI)                                                               
+-----------------                                                               
+             4460                                                               
+             3364                                                               
+             2999                                                               
+             3730                                                               
+             2999                                                               
+             3364                                                               
+             4095                                                               
+             2999                                                               
+             2999                                                               
+             3364                                                               
+             2999                                                               
+
+TRUNC(SYSDATE-FI)                                                               
+-----------------                                                               
+             2269                                                               
+             3364                                                               
+             2634                                                               
+             2788                                                               
+             3364                                                               
+             2634                                                               
+             2999                                                               
+             2634                                                               
+
+19 rows selected.
+
+SQL> SELECT TRUNC ((SYSDATE - FI),1)
+  2  FROM PLAN_DOCENTE;
+
+TRUNC((SYSDATE-FI),1)                                                           
+---------------------                                                           
+               4460.6                                                           
+               3364.6                                                           
+               2999.6                                                           
+               3730.6                                                           
+               2999.6                                                           
+               3364.6                                                           
+               4095.6                                                           
+               2999.6                                                           
+               2999.6                                                           
+               3364.6                                                           
+               2999.6                                                           
+
+TRUNC((SYSDATE-FI),1)                                                           
+---------------------                                                           
+               2269.6                                                           
+               3364.6                                                           
+               2634.6                                                           
+               2788.6                                                           
+               3364.6                                                           
+               2634.6                                                           
+               2999.6                                                           
+               2634.6                                                           
+
+19 rows selected.
+
+SQL> SELECT FLOOR (SYSDATE - FI)
+  2  FROM PLAN_DOCENTE;
+
+FLOOR(SYSDATE-FI)                                                               
+-----------------                                                               
+             4460                                                               
+             3364                                                               
+             2999                                                               
+             3730                                                               
+             2999                                                               
+             3364                                                               
+             4095                                                               
+             2999                                                               
+             2999                                                               
+             3364                                                               
+             2999                                                               
+
+FLOOR(SYSDATE-FI)                                                               
+-----------------                                                               
+             2269                                                               
+             3364                                                               
+             2634                                                               
+             2788                                                               
+             3364                                                               
+             2634                                                               
+             2999                                                               
+             2634                                                               
+
+19 rows selected.
+
+SQL> SELECT CEIL (SYSDATE - FI)
+  2  FROM PLAN_DOCENTE;
+
+CEIL(SYSDATE-FI)                                                                
+----------------                                                                
+            4461                                                                
+            3365                                                                
+            3000                                                                
+            3731                                                                
+            3000                                                                
+            3365                                                                
+            4096                                                                
+            3000                                                                
+            3000                                                                
+            3365                                                                
+            3000                                                                
+
+CEIL(SYSDATE-FI)                                                                
+----------------                                                                
+            2270                                                                
+            3365                                                                
+            2635                                                                
+            2789                                                                
+            3365                                                                
+            2635                                                                
+            3000                                                                
+            2635                                                                
+
+19 rows selected.
+
+SQL> SELECT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE (FF-FI) > 365
+  4  OR ((SYSDATE - FI;
+OR ((SYSDATE - FI
+                *
+ERROR at line 4:
+ORA-00920: invalid relational operator 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((FF-FI) > 365) AND FI IS NOT NULL)
+  4  OR ((SYSDATE - FI) > 365 AND FI IS NULL);
+WHERE ((FF-FI) > 365) AND FI IS NOT NULL)
+                                        *
+ERROR at line 3:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((FF-FI) > 365) AND FI IS NOT NULL)
+  4  OR ((SYSDATE - FI) > 365 AND FI IS NULL);
+WHERE ((FF-FI) > 365) AND FI IS NOT NULL)
+                                        *
+ERROR at line 3:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((FF-FI) > 365 AND FI IS NOT NULL)
+  4  OR ((SYSDATE - FI) > 365 AND FI IS NULL);
+
+P                                                                               
+------------------------------------------------------------                    
+DAVID                                                                           
+JUAN                                                                            
+MARIA                                                                           
+CARMEN                                                                          
+
+SQL> SPOOL OFF
