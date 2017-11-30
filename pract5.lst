@@ -468,3 +468,407 @@ OPTIMIZACION
 ALMACENES DE DATOS                                                              
 
 SQL> SPOOL OFF
+SQL> SELECT DISTINCT A
+  2  FROM ASIGNATURA NATURAL JOIN PLAN_DOCENTE
+  3  WHERE DNI IN(
+  4  SELECT DNI
+  5  FROM PROFESOR
+  6  WHERE CAT='CU')
+  7  AND DNI NOT IN(
+  8  SELECT DNI FROM PROFESOR
+  9  WHERE CAT != 'CU');
+
+A                                                                               
+--------------------------------------------------                              
+OPTIMIZACION                                                                    
+ALMACENES DE DATOS                                                              
+
+SQL> SELECT A
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE (A = 'LENGUAJES Y SISTEMAS INFORMATICOS'
+  4  OR A = 'CIENCIAS DE LA COMPUTACION E INTELIGENCIA'
+  5  L4
+  6  
+SQL> L
+  1  SELECT A
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE (A = 'LENGUAJES Y SISTEMAS INFORMATICOS'
+  4  OR A = 'CIENCIAS DE LA COMPUTACION E INTELIGENCIA'
+  5* L4
+SQL> ;
+  1  SELECT A
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE (A = 'LENGUAJES Y SISTEMAS INFORMATICOS'
+  4  OR A = 'CIENCIAS DE LA COMPUTACION E INTELIGENCIA'
+  5* L4
+SQL> SELECT A
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE (A = 'LENGUAJES Y SISTEMAS INFORMATICOS'
+  4  OR A = 'CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL');
+
+no rows selected
+
+SQL> SELECT A
+  2  FROM AREA;
+SELECT A
+       *
+ERROR at line 1:
+ORA-00904: "A": invalid identifier 
+
+
+SQL> SELECT AR
+  2  FROM AREA;
+
+AR                                                                              
+------------------------------------------------------------                    
+ALGEBRA                                                                         
+ANALISIS MATEMATICO                                                             
+ASTRONOMIA Y ASTROFISICA                                                        
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+DIDACTICA DE LA MATEMATICA                                                      
+ESTADISTICA E INVESTIGACION OPERATIVA                                           
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+MATEMATICA APLICADA                                                             
+
+8 rows selected.
+
+SQL> SELECT AR
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE (A = 'LENGUAJES Y SISTEMAS INFORMATICOS'
+  4  );
+
+no rows selected
+
+SQL> SELECT A
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE (AR = 'LENGUAJES Y SISTEMAS INFORMATICOS'
+  4  OR AR = 'CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL');
+
+A                                                                               
+--------------------------------------------------                              
+GESTION DE RIESGOS                                                              
+INTELIGENCIA ARTIFICIAL                                                         
+INFORMATICA BASICA                                                              
+MINERIA DE DATOS                                                                
+ALMACENES DE DATOS                                                              
+BASES DE DATOS                                                                  
+
+6 rows selected.
+
+SQL> SELECT *
+  2  FROM ASIGNATURA;
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+         1 BASES DE DATOS                                     GII           3   
+         7          3        1.5        1.5                                     
+                                                                                
+         2 INTELIGENCIA ARTIFICIAL                            GII           3   
+         4        1.5        1.5          3                                     
+                                                                                
+         3 ALMACENES DE DATOS                                 MII           1   
+         7        1.5        1.5          3                                     
+                                                                                
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+         4 MINERIA DE DATOS                                   MII           1   
+         7        1.5          0        1.5                                     
+                                                                                
+         5 INFORMATICA BASICA                                 GII           1   
+         7          3        1.5        1.5                                     
+                                                                                
+         6 ALGEBRA                                            GII           1   
+         1          3          3          0                                     
+                                                                                
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+         7 CALCULO                                            GII           1   
+         8          3          3          0                                     
+                                                                                
+         8 OPTIMIZACION                                       GII           1   
+         6          3        1.5        1.5                                     
+                                                                                
+         9 GESTION DE RIESGOS                                 GII           3   
+         4          3          0          3                                     
+                                                                                
+
+       CAS A                                                  T           CUR   
+---------- -------------------------------------------------- ---- ----------   
+       CAR         CT         CP         CL                                     
+---------- ---------- ---------- ----------                                     
+        10 ASTRONOMIA                                         GF            2   
+         3          3        1.5        1.5                                     
+                                                                                
+        11 ENSENANZA DE LA MATEMATICA                         GM            2   
+         5          6          0          0                                     
+                                                                                
+        12 ANALISIS COMPLEJO                                  GM            4   
+         2        4.5          3          0                                     
+                                                                                
+
+12 rows selected.
+
+SQL> SELECT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR (SYSDATE >= FI AND FF IS NULL)
+  5  AND A IN
+  6  (SELECT A
+  7  FROM ASIGNATURA
+  8  WHERE T='GII' OR T='MII'));
+AND A IN
+    *
+ERROR at line 5:
+ORA-00904: "A": invalid identifier 
+
+
+SQL> SELECT *
+  2  FROM PLAN_DOCENTE
+  3  ;
+
+       DNI        CAS        CTA        CPA        CLA FI        FF             
+---------- ---------- ---------- ---------- ---------- --------- ---------      
+      4444          1          3        1.5        1.5 01-SEP-11                
+      4444          4        1.5          0        1.5 01-SEP-08 31-AUG-10      
+      4444          5          3          0          0 01-SEP-10                
+      1111          8          3        1.5        1.5 01-SEP-07 31-AUG-09      
+      1111          8          3          0          0 01-SEP-09                
+      3030          8          0        1.5        1.5 01-SEP-09                
+      2222          4        1.5          0        1.5 01-SEP-09                
+      2222          3        1.5          0        1.5 01-SEP-06 31-AUG-07      
+      1010          2        1.5        1.5          3 01-SEP-05 31-AUG-08      
+      3333          2        1.5        1.5          3 01-SEP-08                
+      1010          9          3          0          3 01-SEP-08 31-AUG-09      
+
+       DNI        CAS        CTA        CPA        CLA FI        FF             
+---------- ---------- ---------- ---------- ---------- --------- ---------      
+      1010          9        1.5          0        1.5 01-SEP-09                
+      9999          7          3          3          0 01-SEP-10                
+      5555          6          3          3          0 31-MAR-10                
+      6666         10          3        1.5        1.5 01-SEP-08 31-AUG-11      
+      8888         11          6          0          0 01-SEP-09                
+      2020          3        1.5          0        1.5 01-SEP-08                
+      7777         12        4.5          3          0 01-SEP-10                
+      3333          9        1.5          0        1.5 01-SEP-09                
+
+19 rows selected.
+
+SQL> SELECT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR (SYSDATE >= FI AND FF IS NULL)
+  5  AND CAS IN
+  6  (SELECT CAS
+  7  FROM ASIGNATURA
+  8  WHERE T='GII' OR T='MII'));
+
+P                                                                               
+------------------------------------------------------------                    
+DAVID                                                                           
+JUAN                                                                            
+SOLEDAD                                                                         
+CARLOS                                                                          
+JOSE MANUEL                                                                     
+PEDRO                                                                           
+PEDRO                                                                           
+MARIA                                                                           
+MARIA                                                                           
+IVAN                                                                            
+ANGELA                                                                          
+
+11 rows selected.
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR (SYSDATE >= FI AND FF IS NULL)
+  5  AND CAS IN
+  6  (SELECT CAS
+  7  FROM ASIGNATURA
+  8  WHERE T='GII' OR T='MII'));
+
+P                                                                               
+------------------------------------------------------------                    
+JUAN                                                                            
+PEDRO                                                                           
+SOLEDAD                                                                         
+DAVID                                                                           
+CARLOS                                                                          
+IVAN                                                                            
+MARIA                                                                           
+JOSE MANUEL                                                                     
+ANGELA                                                                          
+
+9 rows selected.
+
+SQL> SELECT DISTINCT P
+  2  ;
+
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR (SYSDATE >= FI AND FF IS NULL)
+  5  AND CAS IN(
+  6  SELECT CAS
+  7  FROM ASIGNATURA
+  8  WHERE T='GII'
+  9  )
+ 10  AND CAS IN
+ 11  SELECT CAS
+ 12  FROM ASIGNATURA
+ 13  WHERE T='MII'));
+WHERE ((SYSDATE BETWEEN FI AND FF)
+                *
+ERROR at line 3:
+ORA-00936: missing expression 
+
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR (SYSDATE >= FI AND FF IS NULL)
+  5  AND CAS IN
+  6  SELECT CAS
+  7  FROM ASIGNATURA
+  8  WHERE T='GII')
+  9  AND CAS IN
+ 10  ;
+WHERE ((SYSDATE BETWEEN FI AND FF)
+                *
+ERROR at line 3:
+ORA-00936: missing expression 
+
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR (SYSDATE >= FI AND FF IS NULL)
+  5  AND CAS IN (
+  6  SELECT CAS
+  7  FROM ASIGNATURA
+  8  WHERE T='GII')
+  9  AND CAS IN (
+ 10  SELECT CAS
+ 11  FROM ASIGNATURA
+ 12  WHERE T='MII));
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR (SYSDATE >= FI AND FF IS NULL)
+  5  AND CAS IN (
+  6  FROM ASIGNATURA
+  7  AND CAS IN (;
+WHERE ((SYSDATE BETWEEN FI AND FF)
+                *
+ERROR at line 3:
+ORA-00936: missing expression 
+
+
+SQL> SELECT DISTINCT P
+  2  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+  3  WHERE ((SYSDATE BETWEEN FI AND FF)
+  4  OR(SYSDATE>=FI AND FF IS NULL)
+  5  AND CAS IN (
+  6  SELECT CAS
+  7  FROM ASIGNATURA
+  8  WHERE T='GII'))
+  9  INTERSECT
+ 10  SELECT DISTINCT P
+ 11  FROM PROFESOR NATURAL JOIN PLAN_DOCENTE
+ 12  WHERE ((SYSDATE BETWEEN FI AND FF)
+ 13  OR(SYSDATE>=FI AND FF IS NULL)
+ 14  AND CAS IN (
+ 15  SELECT CAS
+ 16  FROM ASIGNATURA
+ 17  WHERE T='MII'));
+
+no rows selected
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI NOT IN (
+  4  SELECT DNI
+  5  FROM PLAN_DOCENTE
+  6  WHERE (SYSDATE BETWEEN FI AND FF)
+  7  OR (SYSDATE >= FI AND FF IS NULL);
+OR (SYSDATE >= FI AND FF IS NULL)
+                                *
+ERROR at line 7:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI NOT IN (
+  4  SELECT DNI
+  5  FROM PLAN_DOCENTE
+  6  WHERE (SYSDATE BETWEEN FI AND FF)
+  7  OR (SYSDATE >= FI AND FF IS NULL));
+
+P                                                                               
+------------------------------------------------------------                    
+CARMEN                                                                          
+
+SQL> SELECT DISTINCT A
+  2  FROM ASIGNATURA NATURAL JOIN PLAN_DOCENTE
+  3  WHERE T='GII'
+  4  AND ((SYSDATE BETWEEN FI AND FF)
+  5  OR (SYSDATE >= FI AND FF IS NULL));
+
+A                                                                               
+--------------------------------------------------                              
+ALGEBRA                                                                         
+BASES DE DATOS                                                                  
+INFORMATICA BASICA                                                              
+OPTIMIZACION                                                                    
+CALCULO                                                                         
+GESTION DE RIESGOS                                                              
+INTELIGENCIA ARTIFICIAL                                                         
+
+7 rows selected.
+
+SQL> SELECT AR, A
+  2  FROM AREA NATURAL JOIN ASIGNATURA
+  3  GROUP BY AR;
+SELECT AR, A
+           *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT A, AR
+  2  FROM AREA NATURAL JOIN ASIGNATURA
+  3  GROUP BY AR;
+SELECT A, AR
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT A, AR
+  2  FROM AREA NATURAL JOIN DEPARTAMENTO NATURAL JOIN ASIGNATURA
+  3  GROUP BY AR;
+SELECT A, AR
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SPOOL OFF
