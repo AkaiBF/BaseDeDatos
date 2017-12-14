@@ -346,3 +346,485 @@ MARIA
 CARMEN                                                                          
 
 SQL> SPOOL OFF
+SQL> SELECT COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN DEPARTAMENTO
+  3  WHERE D='ASTROFISICA';
+
+  COUNT(P)                                                                      
+----------                                                                      
+        12                                                                      
+
+SQL> SELECT D, COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN DEPARTAMENTO
+  3  GROUP BY D, COUNT(P)
+  4  ORDER BY D, COUNT(P) ASC;
+GROUP BY D, COUNT(P)
+            *
+ERROR at line 3:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT D, COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN DEPARTAMENTO
+  3  GROUP BY D, COUNT(P)
+  4  ;
+GROUP BY D, COUNT(P)
+            *
+ERROR at line 3:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT D, COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN DEPARTAMENTO
+  3  GROUP BY D, P
+  4  ORDER BY D, COUNT(P) ASC;
+
+D                                                              COUNT(P)         
+------------------------------------------------------------ ----------         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+ANALISIS MATEMATICO                                                   1         
+
+D                                                              COUNT(P)         
+------------------------------------------------------------ ----------         
+ANALISIS MATEMATICO                                                   1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+
+D                                                              COUNT(P)         
+------------------------------------------------------------ ----------         
+ASTROFISICA                                                           1         
+ASTROFISICA                                                           1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+
+D                                                              COUNT(P)         
+------------------------------------------------------------ ----------         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+
+D                                                              COUNT(P)         
+------------------------------------------------------------ ----------         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+MATEMATICA FUNDAMENTAL                                                1         
+
+48 rows selected.
+
+SQL> SELECT DISTINCT D, COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN DEPARTAMENTO
+  3  GROUP BY D, P
+  4  ORDER BY D, COUNT(P) ASC;
+
+D                                                              COUNT(P)         
+------------------------------------------------------------ ----------         
+ANALISIS MATEMATICO                                                   1         
+ASTROFISICA                                                           1         
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                    1         
+MATEMATICA FUNDAMENTAL                                                1         
+
+SQL> SELECT COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN AREA
+  3  WHERE AR LIKE A%;
+WHERE AR LIKE A%
+               *
+ERROR at line 3:
+ORA-00911: invalid character 
+
+
+SQL> SELECT COUNT(P)
+  2  WHERE AR LIKE A%;
+WHERE AR LIKE A%
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT COUNT(P)
+  2  FROM PROFESOR NATURAL JOIN AREA
+  3  WHERE AR LIKE 'A%';
+
+  COUNT(P)                                                                      
+----------                                                                      
+         3                                                                      
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  HAVING CT=MAX(CT);
+HAVING CT=MAX(CT)
+       *
+ERROR at line 3:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT A, CT
+  2  FROM ASIGNATURA
+  3  HAVING CT=MAX(CT);
+HAVING CT=MAX(CT)
+       *
+ERROR at line 3:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  GROUP BY CT, A
+  4  HAVING CT=MAX(CT);
+
+A                                                                               
+--------------------------------------------------                              
+INTELIGENCIA ARTIFICIAL                                                         
+ANALISIS COMPLEJO                                                               
+CALCULO                                                                         
+ASTRONOMIA                                                                      
+BASES DE DATOS                                                                  
+ALMACENES DE DATOS                                                              
+MINERIA DE DATOS                                                                
+ALGEBRA                                                                         
+ESTADISTICA                                                                     
+ENSENANZA DE LA MATEMATICA                                                      
+GESTION DE RIESGOS                                                              
+
+A                                                                               
+--------------------------------------------------                              
+OPTIMIZACION                                                                    
+INFORMATICA BASICA                                                              
+
+13 rows selected.
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  GROUP BY A
+  4  HAVING CT=MAX(CT);
+HAVING CT=MAX(CT)
+       *
+ERROR at line 4:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  WHERE CT=MAX(CT);
+WHERE CT=MAX(CT)
+         *
+ERROR at line 3:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  GROUP BY A, CT
+  4  WHERE CT=MAX(CT);
+WHERE CT=MAX(CT)
+*
+ERROR at line 4:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  GROUP BY A, CT
+  4  HAVING CT=MAX(CT);
+
+A                                                                               
+--------------------------------------------------                              
+ESTADISTICA                                                                     
+MINERIA DE DATOS                                                                
+INFORMATICA BASICA                                                              
+CALCULO                                                                         
+ASTRONOMIA                                                                      
+ENSENANZA DE LA MATEMATICA                                                      
+INTELIGENCIA ARTIFICIAL                                                         
+ALGEBRA                                                                         
+ALMACENES DE DATOS                                                              
+GESTION DE RIESGOS                                                              
+BASES DE DATOS                                                                  
+
+A                                                                               
+--------------------------------------------------                              
+OPTIMIZACION                                                                    
+ANALISIS COMPLEJO                                                               
+
+13 rows selected.
+
+SQL> SELECT A, CT
+  2  FROM ASIGNATURA
+  3  GROUP BY A, CT
+  4  HAVING CT=MAX(CT);
+
+A                                                          CT                   
+-------------------------------------------------- ----------                   
+ESTADISTICA                                                 0                   
+MINERIA DE DATOS                                          1.5                   
+INFORMATICA BASICA                                          3                   
+CALCULO                                                     3                   
+ASTRONOMIA                                                  3                   
+ENSENANZA DE LA MATEMATICA                                  6                   
+INTELIGENCIA ARTIFICIAL                                   1.5                   
+ALGEBRA                                                     3                   
+ALMACENES DE DATOS                                        1.5                   
+GESTION DE RIESGOS                                          3                   
+BASES DE DATOS                                              3                   
+
+A                                                          CT                   
+-------------------------------------------------- ----------                   
+OPTIMIZACION                                                3                   
+ANALISIS COMPLEJO                                         4.5                   
+
+13 rows selected.
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  GROUP BY A
+  4  HAVING CT=MAX(CT);
+HAVING CT=MAX(CT)
+       *
+ERROR at line 4:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT A, CT
+  2  FROM ASIGNATURA
+  3  GROUP BY A
+  4  HAVING CT=MAX(CT);
+HAVING CT=MAX(CT)
+       *
+ERROR at line 4:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  WHERE CT = MAX(CT);
+WHERE CT = MAX(CT)
+           *
+ERROR at line 3:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  WHERE CT IN
+  4  (SELECT MAX(CT)
+  5  FROM ASIGNATURA)
+  6  ;
+
+A                                                                               
+--------------------------------------------------                              
+ENSENANZA DE LA MATEMATICA                                                      
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  WHERE CT IN
+  4  (SELECT MIN(CT)
+  5  FROM ASIGNATURA);
+
+A                                                                               
+--------------------------------------------------                              
+ESTADISTICA                                                                     
+
+SQL> SELECT AS, (CL + CP + CT)
+  2  FROM ASIGNATURA
+  3  GROUP BY AS, (CL + CP + CT);
+SELECT AS, (CL + CP + CT)
+       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT AS, CL + CP + CT
+  2  FROM ASIGNATURA
+  3  GROUP BY AS, CL + CP + CT;
+SELECT AS, CL + CP + CT
+       *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT A, CL + CP + CT
+  2  FROM ASIGNATURA
+  3  GROUP BY A, CL + CP + CT;
+
+A                                                    CL+CP+CT                   
+-------------------------------------------------- ----------                   
+ALMACENES DE DATOS                                          6                   
+ESTADISTICA                                                 0                   
+ALGEBRA                                                     6                   
+ANALISIS COMPLEJO                                         7.5                   
+CALCULO                                                     6                   
+ENSENANZA DE LA MATEMATICA                                  6                   
+BASES DE DATOS                                              6                   
+INTELIGENCIA ARTIFICIAL                                     6                   
+ASTRONOMIA                                                  6                   
+INFORMATICA BASICA                                          6                   
+OPTIMIZACION                                                6                   
+
+A                                                    CL+CP+CT                   
+-------------------------------------------------- ----------                   
+GESTION DE RIESGOS                                          6                   
+MINERIA DE DATOS                                            3                   
+
+13 rows selected.
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  WHERE CT+CP+CL IN
+  4  (SELECT MAX(CT+CP+CL)
+  5  FROM ASIGNATURA);
+
+A                                                                               
+--------------------------------------------------                              
+ANALISIS COMPLEJO                                                               
+
+SQL> SELECT A
+  2  FROM ASIGNATURA
+  3  WHERE CT+CP+CL IN
+  4  (SELECT MIN(CT+CP+CL)
+  5  FROM ASIGNATURA);
+
+A                                                                               
+--------------------------------------------------                              
+ESTADISTICA                                                                     
+
+SQL> SELECT AR
+  2  FROM ASIGNATURA NATURAL JOIN AREA
+  3  WHERE CT+CP+CL IN
+  4  (SELECT MAX(CT+CP+CL)
+  5  FROM ASIGNATURA);
+
+AR                                                                              
+------------------------------------------------------------                    
+ANALISIS MATEMATICO                                                             
+
+SQL> SELECT COUNT(T)
+  2  FROM PLAN_DOCENTE
+  3  WHERE CAS IN
+  4  (SELECT CAS
+  5  FROM ASIGNATURA
+  6  WHERE CAR IN
+  7  (SELECT CAR
+  8  FROM AREA
+  9  WHERE CD IN
+ 10  (SELECT CD
+ 11  FROM DEPARTAMENTO
+ 12  WHERE D = 'ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION)
+ 13  ));
+ERROR:
+ORA-01756: quoted string not properly terminated 
+
+
+SQL> SELECT COUNT(T)
+  2  FROM PLAN_DOCENTE
+  3  WHERE CAS IN
+  4  (SELECT CAS
+  5  FROM ASIGNATURA
+  6  WHERE CAR IN
+  7  (SELECT CAR
+  8  FROM AREA
+  9  WHERE CD IN
+ 10  (SELECT CD
+ 11  FROM DEPARTAMENTO
+ 12  WHERE D = 'ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION')
+ 13  ));
+SELECT COUNT(T)
+             *
+ERROR at line 1:
+ORA-00904: "T": invalid identifier 
+
+
+SQL> SELECT COUNT(DISTINCT T)
+  2  FROM ASIGNATURA
+  3  WHERE CAR IN
+  4  (SELECT CAR
+  5  FROM AREA
+  6  WHERE CD IN
+  7  (SELECT CD
+  8  FROM DEPARTAMENTO
+  9  WHERE D = 'ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION')
+ 10  );
+
+COUNT(DISTINCTT)                                                                
+----------------                                                                
+               2                                                                
+
+SQL> SELECT T, COUNT(T)
+  2  FROM ASIGNATURA
+  3  GROUP BY T, A;
+
+T      COUNT(T)                                                                 
+---- ----------                                                                 
+GII           1                                                                 
+MII           1                                                                 
+MII           1                                                                 
+GII           1                                                                 
+GF            1                                                                 
+GII           1                                                                 
+GM            1                                                                 
+GII           1                                                                 
+GII           1                                                                 
+GII           1                                                                 
+GII           1                                                                 
+
+T      COUNT(T)                                                                 
+---- ----------                                                                 
+GII           1                                                                 
+GM            1                                                                 
+
+13 rows selected.
+
+SQL> SELECT DISTINCT T, COUNT(T)
+  2  FROM ASIGNATURA
+  3  GROUP BY T, A;
+
+T      COUNT(T)                                                                 
+---- ----------                                                                 
+MII           1                                                                 
+GF            1                                                                 
+GII           1                                                                 
+GM            1                                                                 
+
+SQL> SELECT T, COUNT(*)
+  2  FROM ASIGNATURA
+  3  GROUP BY T;
+
+T      COUNT(*)                                                                 
+---- ----------                                                                 
+GF            1                                                                 
+GM            2                                                                 
+GII           8                                                                 
+MII           2                                                                 
+
+SQL> SPOOL OFF
