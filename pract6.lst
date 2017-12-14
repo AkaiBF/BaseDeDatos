@@ -828,3 +828,445 @@ GII           8
 MII           2                                                                 
 
 SQL> SPOOL OFF
+SQL> SELECT COUNT(DISTINCT CAS)
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='1111';
+
+COUNT(DISTINCTCAS)                                                              
+------------------                                                              
+                 1                                                              
+
+SQL> SELECT CAS
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='1111';
+
+       CAS                                                                      
+----------                                                                      
+         8                                                                      
+         8                                                                      
+
+SQL> SELECT SUM(CLA + CPA + CTA)
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='1111';
+
+SUM(CLA+CPA+CTA)                                                                
+----------------                                                                
+               9                                                                
+
+SQL> SELECT (CLA + CPA + CTA)
+  2  FROM PLAN_DOCENTE
+  3  WHERE DNI='1111';
+
+(CLA+CPA+CTA)                                                                   
+-------------                                                                   
+            6                                                                   
+            3                                                                   
+
+SQL> SELECT MAX(COUNT(CLA + CPA + CTA))
+  2  FROM PLAN_DOCENTE;
+SELECT MAX(COUNT(CLA + CPA + CTA))
+           *
+ERROR at line 1:
+ORA-00978: nested group function without GROUP BY 
+
+
+SQL> SELECT MAX(
+  2  SELECT COUNT(CLA + CPA + CTA)
+  3  )
+  4  ;
+SELECT COUNT(CLA + CPA + CTA)
+*
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> SELECT MAX(
+  2  SELECT COUNT(CLA + CPA + CTA)
+  3  FROM PLAN_DOCENTE);
+SELECT COUNT(CLA + CPA + CTA)
+*
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> SELECT MAX(
+  2  SELECT SUM(CLA + CPA + CTA)
+  3  FROM PLAN_DOCENTE);
+SELECT SUM(CLA + CPA + CTA)
+*
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> SELECT MAX(
+  2  SELECT SUM(CLA + CPA + CTA)
+  3  FROM PLAN_DOCENTE)
+  4  FROM PLAN_DOCENTE;
+SELECT SUM(CLA + CPA + CTA)
+*
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> SELECT P
+  2  FROM PLAN_DOCENTE
+  3  GROUP BY CLA + CPA + CTA
+  4  HAVING CLA + CPA + CTA = MAX(CLA + CPA + CTA);
+SELECT P
+       *
+ERROR at line 1:
+ORA-00904: "P": invalid identifier 
+
+
+SQL> SELECT DNI, CLA + CPA + CTA
+  2  FROM PLAN_DOCENTE
+  3  GROUP BY CLA + CPA + CTA
+  4  HAVING CLA + CPA + CTA = MAX(CLA + CPA + CTA);
+SELECT DNI, CLA + CPA + CTA
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT DNI, CLA + CPA + CTA AS CTOT
+  2  FROM PLAN_DOCENTE;
+
+       DNI       CTOT                                                           
+---------- ----------                                                           
+      4444          6                                                           
+      4444          3                                                           
+      4444          3                                                           
+      1111          6                                                           
+      1111          3                                                           
+      3030          3                                                           
+      2222          3                                                           
+      2222          3                                                           
+      1010          6                                                           
+      3333          6                                                           
+      1010          6                                                           
+
+       DNI       CTOT                                                           
+---------- ----------                                                           
+      1010          3                                                           
+      9999          6                                                           
+      5555          6                                                           
+      6666          6                                                           
+      8888          6                                                           
+      2020          3                                                           
+      7777        7.5                                                           
+      3333          3                                                           
+
+19 rows selected.
+
+SQL> SELECT DNI, CLA + CPA + CTA AS CTOT
+  2  FROM PLAN_DOCENTE
+  3  GROUP BY CTOT, DNI
+  4  HAVING CTOT = MAX(CTOT);
+HAVING CTOT = MAX(CTOT)
+                  *
+ERROR at line 4:
+ORA-00904: "CTOT": invalid identifier 
+
+
+SQL> SELECT DNI, CLA + CPA + CTA AS CTOT
+  2  GROUP BY CTOT, DNI;
+GROUP BY CTOT, DNI
+*
+ERROR at line 2:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT DNI, CTOT
+  2  FROM PLAN_DOCENTE
+  3  GROUP BY CTOT, DNI
+  4  HAVING CTOT = MAX(CLA + CPA + CTA AS CTOT);
+HAVING CTOT = MAX(CLA + CPA + CTA AS CTOT)
+                                  *
+ERROR at line 4:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT DNI, CTOT
+  2  FROM PLAN_DOCENTE
+  3  GROUP BY CTOT, DNI
+  4  HAVING CTOT = MAX((CLA + CPA + CTA) AS CTOT);
+HAVING CTOT = MAX((CLA + CPA + CTA) AS CTOT)
+                                    *
+ERROR at line 4:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT DNI, CLA + CPA + CTA AS CTOT
+  2  FROM PLAN_DOCENTE
+  3  GROUP BY CTOT, DNI
+  4  HAVING CTOT = MAX(CLA + CPA + CTA);
+HAVING CTOT = MAX(CLA + CPA + CTA)
+       *
+ERROR at line 4:
+ORA-00904: "CTOT": invalid identifier 
+
+
+SQL> SELECT DNI, CLA + CPA + CTA AS CTOT
+  2  FROM PLAN_DOCENTE;
+
+       DNI       CTOT                                                           
+---------- ----------                                                           
+      4444          6                                                           
+      4444          3                                                           
+      4444          3                                                           
+      1111          6                                                           
+      1111          3                                                           
+      3030          3                                                           
+      2222          3                                                           
+      2222          3                                                           
+      1010          6                                                           
+      3333          6                                                           
+      1010          6                                                           
+
+       DNI       CTOT                                                           
+---------- ----------                                                           
+      1010          3                                                           
+      9999          6                                                           
+      5555          6                                                           
+      6666          6                                                           
+      8888          6                                                           
+      2020          3                                                           
+      7777        7.5                                                           
+      3333          3                                                           
+
+19 rows selected.
+
+SQL> SELECT AVG(CAS), AR
+  2  FROM AREA NATURAL JOIN ASIGNATURA
+  3  GROUP BY AR, AVG(CAS);
+GROUP BY AR, AVG(CAS)
+             *
+ERROR at line 3:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT AVG(CAS), AR
+  2  FROM AREA NATURAL JOIN ASIGNATURA
+  3  GROUP BY AR, CAS;
+
+  AVG(CAS) AR                                                                   
+---------- ------------------------------------------------------------         
+         6 ALGEBRA                                                              
+        12 ANALISIS MATEMATICO                                                  
+        10 ASTRONOMIA Y ASTROFISICA                                             
+         2 CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                 
+         9 CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                 
+        11 DIDACTICA DE LA MATEMATICA                                           
+        13 ESTADISTICA E INVESTIGACION OPERATIVA                                
+         8 ESTADISTICA E INVESTIGACION OPERATIVA                                
+         3 LENGUAJES Y SISTEMAS INFORMATICOS                                    
+         4 LENGUAJES Y SISTEMAS INFORMATICOS                                    
+         1 LENGUAJES Y SISTEMAS INFORMATICOS                                    
+
+  AVG(CAS) AR                                                                   
+---------- ------------------------------------------------------------         
+         5 LENGUAJES Y SISTEMAS INFORMATICOS                                    
+         7 MATEMATICA APLICADA                                                  
+
+13 rows selected.
+
+SQL> SELECT AVG(
+  2  SELECT COUNT(A)
+  3  FROM AREA NATURAL JOIN ASIGNATURA
+  4  GROUP BY AR)
+  5  FROM AREA;
+SELECT COUNT(A)
+*
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> SELECT AR
+  2  FROM AREA NATURAL JOIN ASIGNATURA
+  3  ORDER BY AR
+  4  HAVING COUNT(DISTINCT CAS) > 3
+  5  ;
+HAVING COUNT(DISTINCT CAS) > 3
+*
+ERROR at line 4:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT AR
+  2  FROM AREA NATURAL JOIN ASIGNATURA
+  3  ORDER BY AR, CAS
+  4  HAVING COUNT(DISTINCT CAS) > 3;
+HAVING COUNT(DISTINCT CAS) > 3
+*
+ERROR at line 4:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT COUNT(DISTINCT CAS), AR
+  2  FROM AREA NATURAL JOIN ASIGNATURA
+  3  ORDER BY AR
+  4  HAVING COUNT(DISTINCT CAS) > 3;
+HAVING COUNT(DISTINCT CAS) > 3
+*
+ERROR at line 4:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> DESCRIBE DEPARTAMENTO;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CD                                        NOT NULL NUMBER(2)
+ D                                                  VARCHAR2(60)
+
+SQL> SELECT MAX(
+  2  ;
+
+*
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> SELECT MAX(*)
+  2  FROM
+  3  (SELECT SUM(CLA + CPA + CTA)
+  4  FROM PLAN_DOCENTE
+  5  GROUP BY DNI);
+SELECT MAX(*)
+           *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT MAX(CTOT)
+  2  FROM
+  3  (SELECT SUM(CLA + CPA + CTA) AS CTOT
+  4  FROM PLAN_DOCENTE
+  5  GROUP BY DNI);
+
+ MAX(CTOT)                                                                      
+----------                                                                      
+        15                                                                      
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI IN(
+  4  SELECT DNI
+  5  , MAX(CTOT)
+  6  FROM (SELECT SUM(CLA + CPA + CTA) AS CTOT, DNI
+  7  FROM PLAN_DOCENTE
+  8  GROUP BY DNI));
+SELECT DNI
+*
+ERROR at line 4:
+ORA-00913: too many values 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI IN(
+  4  SELECT DNI
+  5  FROM (SELECT DNI, MAX(CTOT)
+  6  FROM (SELECT SUM(CLA + CPA + CTA) AS CTOT, DNI
+  7  FROM PLAN_DOCENTE
+  8  GROUP BY DNI)));
+FROM (SELECT DNI, MAX(CTOT)
+             *
+ERROR at line 5:
+ORA-00937: not a single-group group function 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI IN(
+  4  SELECT DNI
+  5  FROM (SELECT DNI
+  6  FROM (SELECT SUM(CLA + CPA + CTA) AS CTOT, DNI
+  7  FROM PLAN_DOCENTE
+  8  GROUP BY DNI))
+  9  WHERE CTOT = MAX(CTOT));
+WHERE CTOT = MAX(CTOT))
+             *
+ERROR at line 9:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI IN(
+  4  ;
+
+*
+ERROR at line 4:
+ORA-00936: missing expression 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI IN(
+  4  SELECT DNI
+  5  FROM PLAN_DOCENTE
+  6  WHERE CTOT = (
+  7  SELECT MAX(CTOT)
+  8  FROM
+  9  (SELECT SUM(CLA + CPA + CTA) AS CTOT
+ 10  FROM PLAN_DOCENTE
+ 11  GROUP BY DNI));
+GROUP BY DNI))
+             *
+ERROR at line 11:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI IN(
+  4  SELECT DNI
+  5  FROM PLAN_DOCENTE
+  6  WHERE CTOT = (
+  7  SELECT MAX(CTOT)
+  8  FROM
+  9  (SELECT SUM(CLA + CPA + CTA) AS CTOT
+ 10  FROM PLAN_DOCENTE
+ 11  GROUP BY DNI)));
+WHERE CTOT = (
+      *
+ERROR at line 6:
+ORA-00904: "CTOT": invalid identifier 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI IN(
+  4  SELECT DNI
+  5  , SUM(CLA + CPA + CTA) AS CTOT
+  6  WHERE CTOT = (
+  7  SELECT MAX(CTOT)
+  8  FROM
+  9  (SELECT SUM(CLA + CPA + CTA) AS CTOT
+ 10  FROM PLAN_DOCENTE
+ 11  GROUP BY DNI)));
+WHERE CTOT = (
+*
+ERROR at line 6:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI IN(
+  4  SELECT DNI
+  5  , SUM(CLA + CPA + CTA) AS CTOT
+  6  FROM PLAN_DOCENTE
+  7  WHERE CTOT = (
+  8  SELECT MAX(CTOT)
+  9  FROM
+ 10  (SELECT SUM(CLA + CPA + CTA) AS CTOT
+ 11  FROM PLAN_DOCENTE
+ 12  GROUP BY DNI)));
+SELECT DNI
+*
+ERROR at line 4:
+ORA-00913: too many values 
+
+
+SQL> SPOOL OFF;
