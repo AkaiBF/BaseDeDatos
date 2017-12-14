@@ -872,3 +872,217 @@ ORA-00979: not a GROUP BY expression
 
 
 SQL> SPOOL OFF
+SQL> ;
+  1  DELETE FROM PROFESOR
+  2* WHERE DNI='5050'
+SQL> SELECT D, AR
+  2  FROM DEPARTAMENTO NATURAL JOIN AREA
+  3  GROUP BY D
+  4  ORDER BY D, AR ASC;
+SELECT D, AR
+          *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT AR, D
+  2  FROM DEPARTAMENTO NATURAL JOIN AREA
+  3  GROUP BY D
+  4  ORDER BY D, AR ASC;
+SELECT AR, D
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> DESCRIBE AREA;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CAR                                       NOT NULL NUMBER(3)
+ AR                                                 VARCHAR2(60)
+ CD                                                 NUMBER(2)
+
+SQL> DESCRIBE DEPARTAMENTO;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CD                                        NOT NULL NUMBER(2)
+ D                                                  VARCHAR2(60)
+
+SQL> DESCRIBE AREA NATURAL JOIN DEPARTAMENTO;
+Usage: DESCRIBE [schema.]object[@db_link]
+SQL> SELECT AR, D
+  2  FROM DEPARTAMENTO NATURAL JOIN AREA
+  3  ORDER BY D, AR ASC;
+
+AR                                                                              
+------------------------------------------------------------                    
+D                                                                               
+------------------------------------------------------------                    
+ANALISIS MATEMATICO                                                             
+ANALISIS MATEMATICO                                                             
+                                                                                
+DIDACTICA DE LA MATEMATICA                                                      
+ANALISIS MATEMATICO                                                             
+                                                                                
+MATEMATICA APLICADA                                                             
+ANALISIS MATEMATICO                                                             
+                                                                                
+
+AR                                                                              
+------------------------------------------------------------                    
+D                                                                               
+------------------------------------------------------------                    
+ASTRONOMIA Y ASTROFISICA                                                        
+ASTROFISICA                                                                     
+                                                                                
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+                                                                                
+ESTADISTICA E INVESTIGACION OPERATIVA                                           
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+                                                                                
+
+AR                                                                              
+------------------------------------------------------------                    
+D                                                                               
+------------------------------------------------------------                    
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+                                                                                
+ALGEBRA                                                                         
+MATEMATICA FUNDAMENTAL                                                          
+                                                                                
+
+8 rows selected.
+
+SQL> SELECT AR, D, CD
+  2  FROM DEPARTAMENTO NATURAL JOIN AREA
+  3  GROUP BY CD
+  4  ORDER BY D, AR ASC;
+SELECT AR, D, CD
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT CD, D, AR
+  2  FROM DEPARTAMENTO NATURAL JOIN AREA
+  3  GROUP BY CD
+  4  ORDER BY D, AR ASC;
+SELECT CD, D, AR
+           *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT D, AR
+  2  FROM DEPARTAMENTO NATURAL JOIN AREA
+  3  GROUP BY D, AR
+  4  ORDER BY D, AR ASC;
+
+D                                                                               
+------------------------------------------------------------                    
+AR                                                                              
+------------------------------------------------------------                    
+ANALISIS MATEMATICO                                                             
+ANALISIS MATEMATICO                                                             
+                                                                                
+ANALISIS MATEMATICO                                                             
+DIDACTICA DE LA MATEMATICA                                                      
+                                                                                
+ANALISIS MATEMATICO                                                             
+MATEMATICA APLICADA                                                             
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+AR                                                                              
+------------------------------------------------------------                    
+ASTROFISICA                                                                     
+ASTRONOMIA Y ASTROFISICA                                                        
+                                                                                
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+CIENCIAS DE LA COMPUTACION E INTELIGENCIA ARTIFICIAL                            
+                                                                                
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+ESTADISTICA E INVESTIGACION OPERATIVA                                           
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+AR                                                                              
+------------------------------------------------------------                    
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+LENGUAJES Y SISTEMAS INFORMATICOS                                               
+                                                                                
+MATEMATICA FUNDAMENTAL                                                          
+ALGEBRA                                                                         
+                                                                                
+
+8 rows selected.
+
+SQL> SELECT D, P
+  2  FROM DEPARTAMENTO JOIN AREA ON(DEPARTAMENTO.CD = AREA.CD)
+  3  JOIN PROFESOR ON(AREA.CAR=PROFESOR.CAR)
+  4  GROUP BY D,P
+  5  ORDER BY D,P ASC;
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ANALISIS MATEMATICO                                                             
+ANGELA                                                                          
+                                                                                
+ANALISIS MATEMATICO                                                             
+FRANCISCO                                                                       
+                                                                                
+ANALISIS MATEMATICO                                                             
+MARIO                                                                           
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ASTROFISICA                                                                     
+CARMEN                                                                          
+                                                                                
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+CARLOS                                                                          
+                                                                                
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+DAVID                                                                           
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+JOSE MANUEL                                                                     
+                                                                                
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+JUAN                                                                            
+                                                                                
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+MARIA                                                                           
+                                                                                
+
+D                                                                               
+------------------------------------------------------------                    
+P                                                                               
+------------------------------------------------------------                    
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+PEDRO                                                                           
+                                                                                
+ESTADISTICA, INVESTIFACION OPERATIVA Y COMPUTACION                              
+SOLEDAD                                                                         
+                                                                                
+MATEMATICA FUNDAMENTAL                                                          
+IVAN                                                                            
+                                                                                
+
+12 rows selected.
+
+SQL> SPOOL OFF;
