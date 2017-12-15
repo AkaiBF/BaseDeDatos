@@ -1,0 +1,452 @@
+SQL> SET SERVEROUPUT ON
+SP2-0735: unknown SET option beginning "SERVEROUPU..."
+SQL> SET SERVEROUTPUT ON
+SQL> BEGIN
+  2    DBMS_OUTPUT.PUT_LINE('HOLA MUNDO');
+  3  END;
+  4  /
+HOLA MUNDO                                                                      
+
+PL/SQL procedure successfully completed.
+
+SQL> SAVE HOLAMUNDO
+Created file HOLAMUNDO.sql
+SQL> GET HOLAMUNDO
+  1  BEGIN
+  2    DBMS_OUTPUT.PUT_LINE('HOLA MUNDO');
+  3* END;
+SQL> RUN
+  1  BEGIN
+  2    DBMS_OUTPUT.PUT_LINE('HOLA MUNDO');
+  3* END;
+HOLA MUNDO                                                                      
+
+PL/SQL procedure successfully completed.
+
+SQL> CREATE OR REPLACE PROCEDURE HOLAMUNDO
+  2  IS
+  3  BEGIN
+  4    DBMS_OUTPUT.PUT_LINE('HOLA MUNDO');
+  5  END;
+  6  /
+
+Procedure created.
+
+SQL> HOLAMUNDO();
+SP2-0734: unknown command beginning "HOLAMUNDO(..." - rest of line ignored.
+SQL> BEGIN
+  2    HOLAMUNDO();
+  3  END;
+  4  /
+HOLA MUNDO                                                                      
+
+PL/SQL procedure successfully completed.
+
+SQL> CALL HOLAMUNDO();
+HOLA MUNDO                                                                      
+
+Call completed.
+
+SQL> CREATE OR REPLACE DOBLE (X NUMBER)
+  2  RETURN NUMBER IS
+  3  BEGIN
+  4    RETURN 2 * X;
+CREATE OR REPLACE DOBLE (X NUMBER)
+                  *
+ERROR at line 1:
+ORA-00922: missing or invalid option 
+
+
+SQL> CREATE OR REPLACE FUNCTION DOBLE (X NUMBER)
+  2  RETURN NUMBER IS
+  3  BEGIN
+  4    RETURN 2 * X;
+  5  END;
+  6  /
+
+Function created.
+
+SQL> CALL FUNCTION(4);
+CALL FUNCTION(4)
+     *
+ERROR at line 1:
+ORA-06576: not a valid function or procedure name 
+
+
+SQL> CALL DOBLE(4);
+CALL DOBLE(4)
+     *
+ERROR at line 1:
+ORA-06576: not a valid function or procedure name 
+
+
+SQL> SELECT DOBLE(4)
+  2  FROM DUAL;
+
+  DOBLE(4)                                                                      
+----------                                                                      
+         8                                                                      
+
+SQL> VARIABLE X NUMBER
+SQL> CALL DOBLE(4) INTO :X;
+
+Call completed.
+
+SQL> PRINT X;
+
+         X                                                                      
+----------                                                                      
+         8                                                                      
+
+SQL> PRINT DOBLE(4);
+SP2-0552: Bind variable "DOBLE" not declared.
+Usage: PRINT [:<variable> ...]
+SQL> BEGIN
+  2    DBMS_OUTPUT.PUT_LINE(DOBLE(4));
+  3  END;
+  4  /
+8                                                                               
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT P
+  2  FROM PROFESOR
+  3  WHERE DNI = &d;
+Enter value for d: 1111
+old   3: WHERE DNI = &d
+new   3: WHERE DNI = 1111
+
+P                                                                               
+------------------------------------------------------------                    
+JUAN                                                                            
+
+SQL> CREATE OR REPLACE FUNCTION NOM_PRO(D PROFESOR.DNI%TYPE)
+  2  RETURN PROFESOR.P%TYPE IS
+  3  N PROFESOR.P%TYPE;
+  4  BEGIN
+  5    SELECT P
+  6    INTO N
+  7    FROM PROFESOR
+  8    WHERE DNI=D;
+  9    RETURN N;
+ 10  END;
+ 11  /
+
+Function created.
+
+SQL> SELECT NOM_PRO(1111)
+  2  FROM DUAL;
+
+NOM_PRO(1111)                                                                   
+--------------------------------------------------------------------------------
+JUAN                                                                            
+
+SQL> SELECT NOM_PRO(4040)
+  2  FROM DUAL;
+
+NOM_PRO(4040)                                                                   
+--------------------------------------------------------------------------------
+CARMELO                                                                         
+
+SQL> SELECT *
+  2  FROM &tabla;
+Enter value for tabla: PROFESOR
+old   2: FROM &tabla
+new   2: FROM PROFESOR
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT                                                                  
+---------- -----                                                                
+      4040 CARMELO                                                              
+         7 TU                                                                   
+                                                                                
+      5050 CARINA                                                               
+         8 CEU                                                                  
+                                                                                
+      1111 JUAN                                                                 
+         6 CU                                                                   
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT                                                                  
+---------- -----                                                                
+      2222 CARLOS                                                               
+         7 TU                                                                   
+                                                                                
+      3333 PEDRO                                                                
+         4 TEU                                                                  
+                                                                                
+      4444 MARIA                                                                
+         7 TU                                                                   
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT                                                                  
+---------- -----                                                                
+      5555 IVAN                                                                 
+         1 CEU                                                                  
+                                                                                
+      6666 CARMEN                                                               
+         3 CD                                                                   
+                                                                                
+      7777 MARIO                                                                
+         2 TU                                                                   
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT                                                                  
+---------- -----                                                                
+      8888 FRANCISCO                                                            
+         5 TU                                                                   
+                                                                                
+      9999 ANGELA                                                               
+         8 TEU                                                                  
+                                                                                
+      1010 DAVID                                                                
+         4 TU                                                                   
+                                                                                
+
+       DNI P                                                                    
+---------- ------------------------------------------------------------         
+       CAR CAT                                                                  
+---------- -----                                                                
+      2020 SOLEDAD                                                              
+         7 CU                                                                   
+                                                                                
+      3030 JOSE MANUEL                                                          
+         6 TEU                                                                  
+                                                                                
+
+14 rows selected.
+
+SQL> CREATE OR REPLACE PROCEDURE LISTAR_PRO
+  2  IS
+  3    CURSOR C IS
+  4    SELECT *
+  5    FROM PROFESOR;
+  6  FILA PROFESOR%ROWTYPE;
+  7  BEGIN
+  8    OPEN C;
+  9    LOOP
+ 10      FETCH C INTO FILA;
+ 11      WHEN C%NOT_FOUND THEN EXIT;
+ 12      DBMS_OUTPUT.PUT_LINE(FILA.DNI||FILA.P||FILA.CAT);
+ 13    END LOOP;
+ 14    CLOSE C;
+ 15  END;
+ 16  /
+
+Warning: Procedure created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for PROCEDURE LISTAR_PRO:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+11/5     PLS-00103: Encountered the symbol "WHEN" when expecting one of         
+         the following:                                                         
+         ( begin case declare end exit for goto if loop mod null                
+         pragma raise return select update while with <an identifier>           
+         <a double-quoted delimited-identifier> <a bind variable> <<            
+         continue close current delete fetch lock insert open rollback          
+         savepoint set sql execute commit forall merge pipe purge               
+         json_exists json_value json_query json_object json_array               
+                                                                                
+SQL> CREATE OR REPLACE PROCEDURE LISTAR_PRO
+  2  IS
+  3    CURSOR C IS
+  4    SELECT *
+  5    FROM PROFESOR;
+  6  FILA PROFESOR%ROWTYPE;
+  7  BEGIN
+  8    OPEN C;
+  9    LOOP
+ 10      FETCH C INTO FILA;
+ 11      WHEN C%NOTFOUND THEN EXIT;
+ 12      DBMS_OUTPUT.PUT_LINE(FILA.DNI||FILA.P||FILA.CAT);
+ 13    END LOOP;
+ 14    CLOSE C;
+ 15  END;
+ 16  /
+
+Warning: Procedure created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for PROCEDURE LISTAR_PRO:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+11/5     PLS-00103: Encountered the symbol "WHEN" when expecting one of         
+         the following:                                                         
+         ( begin case declare end exit for goto if loop mod null                
+         pragma raise return select update while with <an identifier>           
+         <a double-quoted delimited-identifier> <a bind variable> <<            
+         continue close current delete fetch lock insert open rollback          
+         savepoint set sql execute commit forall merge pipe purge               
+         json_exists json_value json_query json_object json_array               
+                                                                                
+SQL> L
+  1  CREATE OR REPLACE PROCEDURE LISTAR_PRO
+  2  IS
+  3    CURSOR C IS
+  4    SELECT *
+  5    FROM PROFESOR;
+  6  FILA PROFESOR%ROWTYPE;
+  7  BEGIN
+  8    OPEN C;
+  9    LOOP
+ 10      FETCH C INTO FILA;
+ 11      WHEN C%NOTFOUND THEN EXIT;
+ 12      DBMS_OUTPUT.PUT_LINE(FILA.DNI||FILA.P||FILA.CAT);
+ 13    END LOOP;
+ 14    CLOSE C;
+ 15* END;
+SQL> L11
+ 11*     WHEN C%NOTFOUND THEN EXIT;
+SQL> REPLACE WHEN/IF
+SP2-0734: unknown command beginning "REPLACE WH..." - rest of line ignored.
+SQL> CHANGE WHEN/IF
+SP2-0023: String not found.
+SQL> L11
+ 11*     WHEN C%NOTFOUND THEN EXIT;
+SQL> CHANGE/WHEN/IF
+ 11*     IF C%NOTFOUND THEN EXIT;
+SQL> /
+
+Warning: Procedure created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for PROCEDURE LISTAR_PRO:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+13/7     PLS-00103: Encountered the symbol "LOOP" when expecting one of         
+         the following:                                                         
+         if                                                                     
+                                                                                
+SQL> L
+  1  CREATE OR REPLACE PROCEDURE LISTAR_PRO
+  2  IS
+  3    CURSOR C IS
+  4    SELECT *
+  5    FROM PROFESOR;
+  6  FILA PROFESOR%ROWTYPE;
+  7  BEGIN
+  8    OPEN C;
+  9    LOOP
+ 10      FETCH C INTO FILA;
+ 11      IF C%NOTFOUND THEN EXIT;
+ 12      DBMS_OUTPUT.PUT_LINE(FILA.DNI||FILA.P||FILA.CAT);
+ 13    END LOOP;
+ 14    CLOSE C;
+ 15* END;
+SQL> L11
+ 11*     IF C%NOTFOUND THEN EXIT;
+SQL> CHANGE/IF/WHEN
+ 11*     WHEN C%NOTFOUND THEN EXIT;
+SQL> /
+
+Warning: Procedure created with compilation errors.
+
+SQL> SHOW ERRORS
+Errors for PROCEDURE LISTAR_PRO:
+
+LINE/COL ERROR                                                                  
+-------- -----------------------------------------------------------------      
+11/5     PLS-00103: Encountered the symbol "WHEN" when expecting one of         
+         the following:                                                         
+         ( begin case declare end exit for goto if loop mod null                
+         pragma raise return select update while with <an identifier>           
+         <a double-quoted delimited-identifier> <a bind variable> <<            
+         continue close current delete fetch lock insert open rollback          
+         savepoint set sql execute commit forall merge pipe purge               
+         json_exists json_value json_query json_object json_array               
+                                                                                
+SQL> L
+  1  CREATE OR REPLACE PROCEDURE LISTAR_PRO
+  2  IS
+  3    CURSOR C IS
+  4    SELECT *
+  5    FROM PROFESOR;
+  6  FILA PROFESOR%ROWTYPE;
+  7  BEGIN
+  8    OPEN C;
+  9    LOOP
+ 10      FETCH C INTO FILA;
+ 11      WHEN C%NOTFOUND THEN EXIT;
+ 12      DBMS_OUTPUT.PUT_LINE(FILA.DNI||FILA.P||FILA.CAT);
+ 13    END LOOP;
+ 14    CLOSE C;
+ 15* END;
+SQL> L11
+ 11*     WHEN C%NOTFOUND THEN EXIT;
+SQL> CHANGE/WHEN C%NOTFOUND THEN EXIT/EXIT WHEN C%NOTFOUND
+ 11*     EXIT WHEN C%NOTFOUND;
+SQL> /
+
+Procedure created.
+
+SQL> L
+  1  CREATE OR REPLACE PROCEDURE LISTAR_PRO
+  2  IS
+  3    CURSOR C IS
+  4    SELECT *
+  5    FROM PROFESOR;
+  6  FILA PROFESOR%ROWTYPE;
+  7  BEGIN
+  8    OPEN C;
+  9    LOOP
+ 10      FETCH C INTO FILA;
+ 11      EXIT WHEN C%NOTFOUND;
+ 12      DBMS_OUTPUT.PUT_LINE(FILA.DNI||FILA.P||FILA.CAT);
+ 13    END LOOP;
+ 14    CLOSE C;
+ 15* END;
+SQL> CALL LISTAR_PRO
+  2  ;
+CALL LISTAR_PRO
+     *
+ERROR at line 1:
+ORA-06576: not a valid function or procedure name 
+
+
+SQL> BEGIN
+  2  END
+  3  ;
+  4  /
+END
+*
+ERROR at line 2:
+ORA-06550: line 2, column 1: 
+PLS-00103: Encountered the symbol "END" when expecting one of the following: 
+( begin case declare exit for goto if loop mod null pragma 
+raise return select update while with <an identifier> 
+<a double-quoted delimited-identifier> <a bind variable> << 
+continue close current delete fetch lock insert open rollback 
+savepoint set sql execute commit forall merge pipe purge 
+json_exists json_value json_query json_object json_array 
+
+
+SQL> CALL LISTAR_PRO();
+4040CARMELOTU                                                                   
+5050CARINACEU                                                                   
+1111JUANCU                                                                      
+2222CARLOSTU                                                                    
+3333PEDROTEU                                                                    
+4444MARIATU                                                                     
+5555IVANCEU                                                                     
+6666CARMENCD                                                                    
+7777MARIOTU                                                                     
+8888FRANCISCOTU                                                                 
+9999ANGELATEU                                                                   
+1010DAVIDTU                                                                     
+2020SOLEDADCU                                                                   
+3030JOSE MANUELTEU                                                              
+
+Call completed.
+
+SQL> SPOOL OFF
